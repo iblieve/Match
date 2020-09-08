@@ -3,6 +3,8 @@
 import sys, datetime
 import xlrd
 
+from app.utils.XUtils import XUtils
+
 
 def read_excel():
     wb = xlrd.open_workbook('resources/receiving_address_stock_1_ok.xls')  # 打开Excel文件
@@ -19,7 +21,16 @@ def main(p_argv):
     try:
         address_num = read_excel()  # 返回整个函数的值
         for i in range(0, 10):  # 循环读取a变量list
-            print(address_num[i])
+            #print(address_num[i])
+            pass
+
+        excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
+        resource = 'resources/receiving_address_stock_1_ok.xls'
+        stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
+
+        print(len(stock_addr_list))
+
+
         return 0
     except FileNotFoundError:
         print("Error: 没有找到文件或读取文件失败")
