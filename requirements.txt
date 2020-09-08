@@ -1,0 +1,10 @@
+gevent
+Flask
+Flask-RESTful
+Flask-APScheduler
+Flask-SQLAlchemy
+requests
+PyMySQL
+numpy
+xlrd
+xlwt
