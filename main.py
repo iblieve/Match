@@ -5,7 +5,7 @@ import xlrd
 
 
 def read_excel():
-    wb = xlrd.open_workbook('resource/receiving_address_stock_1_ok.xls')  # 打开Excel文件
+    wb = xlrd.open_workbook('resources/receiving_address_stock_1_ok.xls')  # 打开Excel文件
     sheet = wb.sheet_by_name('Sheet1')  # 通过excel表格名称(rank)获取工作表
     dat = []  # 创建空list
     for a in range(1, sheet.nrows):  # 循环读取表格内容（每次读取一行数据）
