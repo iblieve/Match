@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 import sys, datetime
-import xlrd
+import xlrd, xlwt
 
 from app.utils.XUtils import XUtils
 
@@ -33,8 +33,28 @@ def main(p_argv):
     excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
     resource = 'resources/receiving_address_stock_1_ok.xls'
     stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
-
-    print(len(stock_addr_list))
+    top_10 = []
+    book = xlwt.Workbook()
+    sheet = book.add_sheet("sheet1")
+    top_10.append(excel_title)
+    row_index = 0
+    for i in range(0,10):
+        sing_address = []
+        print(stock_addr_list[i]["rowid"])
+        for value in stock_addr_list[i].values():
+            sing_address.append(value)
+        top_10.append(sing_address)
+    # print(top_10)
+    for i in range(len(top_10)):
+        col_index = 0
+        for val in top_10[i]:
+            sheet.write(row_index, col_index, val)
+            col_index += 1
+        row_index += 1
+    book.save("top_10.xls")
+    return True
+    # print(top_10)
+    # print(len(stock_addr_list))
 
     # TODO please print the top-10 rowid
 
