@@ -49,8 +49,6 @@ def main(p_argv):
     # print(address.longitude)
     # mydict = address.serialize()
     #
-
-
     return True
     # print(top_10)
     # print(len(stock_addr_list))
