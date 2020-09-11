@@ -4,7 +4,7 @@ import sys, datetime
 import xlrd, xlwt
 
 from app.utils.XUtils import XUtils
-from to_excel import list_to_excel
+
 
 #
 # def read_excel():
@@ -37,7 +37,7 @@ def main(p_argv):
     stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
     for i in range(0,10):
         print(stock_addr_list[i]["rowid"])
-    list_to_excel(title_list=excel_title_1, addr_list=stock_addr_list, sheet_name="Sheet1", a=0, b=10)
+    XUtils.list_to_excel(p_title_list=excel_title_1, p_addr_list=stock_addr_list, p_excel_name="top_10.xls", p_sheet_name="Sheet1", p_start=0, p_end=10)
     return True
     # print(top_10)
     # print(len(stock_addr_list))
