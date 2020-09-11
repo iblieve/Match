@@ -409,20 +409,23 @@ class XUtils(object):
         d['__debug_host_name__'] = XUtils.get_host_name()
         return d
 
-    def list_to_excel(p_title_list=None, p_addr_list=None, p_excel_name: str = None, p_sheet_name: str = None) -> (bool):
+    @staticmethod
+    def dump_list_2_excel(p_title_list=None, p_data_list=None, p_excel_name: str = None, p_sheet_name: str = 'Sheet1'):
         """
-        将列表写入Excel中
+        create a new excel and dump the data to this excel
+
         p_title_list 列标题
-        p_start 起始数字
-        p_end 终止数字
+        p_data_list
+        p_excel_name
+        p_sheet_name
         """
         to_excel = [p_title_list]
         book = xlwt.Workbook()
         sheet = book.add_sheet(p_sheet_name)
         row_index = 0
-        for i in range(len(p_addr_list)):
+        for i in range(len(p_data_list)):
             sing_address = []
-            for value in p_addr_list[i].values():
+            for value in p_data_list[i].values():
                 sing_address.append(value)
             to_excel.append(sing_address)
 

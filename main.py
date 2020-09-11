@@ -39,8 +39,8 @@ def main(p_argv):
     for i in range(0, 10):
         top_10.append(stock_addr_list[i])
         print(stock_addr_list[i]["rowid"])
-
-    XUtils.list_to_excel(p_title_list=excel_title_1, p_addr_list=top_10, p_excel_name="top_10.xls", p_sheet_name="Sheet1")
+    t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
     return True
     # print(top_10)
     # print(len(stock_addr_list))
