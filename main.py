@@ -41,6 +41,16 @@ def main(p_argv):
         print(stock_addr_list[i]["rowid"])
     t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
+
+
+    ## NOTE pseudo code as below:
+    # from app.main.models.XAddress import XAddress
+    # address = XAddress(p_dict=top_10[0])
+    # print(address.longitude)
+    # mydict = address.serialize()
+    #
+
+
     return True
     # print(top_10)
     # print(len(stock_addr_list))
