@@ -31,12 +31,13 @@ def main(p_argv):
     #     print("Error: 没有找到文件或读取文件失败")
 
     excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
+    excel_title_1 = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
     resource = 'resources/receiving_address_stock_1_ok.xls'
     stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
     top_10 = []
     book = xlwt.Workbook()
     sheet = book.add_sheet("sheet1")
-    top_10.append(excel_title)
+    top_10.append(excel_title_1)
     row_index = 0
     for i in range(0,10):
         sing_address = []
