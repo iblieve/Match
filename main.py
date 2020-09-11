@@ -35,9 +35,12 @@ def main(p_argv):
     excel_title_1 = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
     resource = 'resources/receiving_address_stock_1_ok.xls'
     stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
-    for i in range(0,10):
+    top_10 = []
+    for i in range(0, 10):
+        top_10.append(stock_addr_list[i])
         print(stock_addr_list[i]["rowid"])
-    XUtils.list_to_excel(p_title_list=excel_title_1, p_addr_list=stock_addr_list, p_excel_name="top_10.xls", p_sheet_name="Sheet1", p_start=0, p_end=10)
+
+    XUtils.list_to_excel(p_title_list=excel_title_1, p_addr_list=top_10, p_excel_name="top_10.xls", p_sheet_name="Sheet1")
     return True
     # print(top_10)
     # print(len(stock_addr_list))

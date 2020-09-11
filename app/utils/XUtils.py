@@ -409,8 +409,7 @@ class XUtils(object):
         d['__debug_host_name__'] = XUtils.get_host_name()
         return d
 
-    def list_to_excel(p_title_list=None, p_addr_list=None, p_excel_name: str = None, p_sheet_name: str = None,
-                      p_start: int = None, p_end: int = None) -> (bool):
+    def list_to_excel(p_title_list=None, p_addr_list=None, p_excel_name: str = None, p_sheet_name: str = None) -> (bool):
         """
         将列表写入Excel中
         p_title_list 列标题
@@ -421,7 +420,7 @@ class XUtils(object):
         book = xlwt.Workbook()
         sheet = book.add_sheet(p_sheet_name)
         row_index = 0
-        for i in range(p_start, p_end):
+        for i in range(len(p_addr_list)):
             sing_address = []
             for value in p_addr_list[i].values():
                 sing_address.append(value)
@@ -433,4 +432,7 @@ class XUtils(object):
                 sheet.write(row_index, col_index, val)
                 col_index += 1
             row_index += 1
+
+        if os.path.exists(p_excel_name):
+            os.remove(p_excel_name)
         book.save(p_excel_name)
