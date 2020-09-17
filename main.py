@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 import sys, datetime
 import xlrd, xlwt
+from XAddress import XAddress
 
 from app.utils.XUtils import XUtils
 
@@ -40,9 +41,9 @@ def main(p_argv):
         top_10.append(stock_addr_list[i])
         print(stock_addr_list[i]["rowid"])
     t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
-
-
+    # XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
+    x = XAddress(stock_addr_list[21])
+    print(x.longitude)
 
 
 
