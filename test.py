@@ -7,6 +7,7 @@ from app.utils.XUtils import XUtils
 from app.main.models.DemoAnimal import DemoAnimal
 from app.main.models.DemoCat import DemoCat
 from app.main.models.DemoDog import DemoDog
+from app.main.models.DemoFish import DemoFish
 
 
 def main(p_argv):
@@ -21,6 +22,13 @@ def main(p_argv):
     dog.bite()
     dog.speak()
     dog.walk()
+
+    print('\n')
+
+    fish = DemoFish(p_name='常威')
+    fish.swim()
+    fish.speak()
+    fish.walk()
 
     return 0
 
