@@ -8,27 +8,39 @@ from app.main.models.DemoAnimal import DemoAnimal
 from app.main.models.DemoCat import DemoCat
 from app.main.models.DemoDog import DemoDog
 from app.main.models.DemoFish import DemoFish
+from app.main.models.DemoSnake import DemoSnake
+
+
+def speak(obj,blood):
+    obj.speak(blood)
 
 
 def main(p_argv):
-    cat = DemoCat(p_name='加菲', p_blood='AB')
+    cat = DemoCat()
     cat.catch_mouse()
-    cat.speak()
+    speak(cat, "AB")
     cat.walk()
     
     print('\n')
 
-    dog = DemoDog(p_name='旺财')
+    dog = DemoDog()
     dog.bite()
     dog.speak()
     dog.walk()
 
     print('\n')
 
-    fish = DemoFish(p_name='常威')
+    fish = DemoFish()
     fish.swim()
     fish.speak()
     fish.walk()
+
+    print('\n')
+
+    snake = DemoSnake()
+    snake.venom()
+    snake.speak()
+    snake.walk()
 
     return 0
 

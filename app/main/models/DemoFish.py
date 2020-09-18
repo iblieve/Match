@@ -6,10 +6,13 @@ from app.main.models.DemoAnimal import DemoAnimal
 
 class DemoFish(DemoAnimal):
 
-    def __init__(self, p_name):
+    def __init__(self):
         # super(DemoAnimal, self).__init__()
-        DemoAnimal.__init__(self, p_name=p_name)
         pass
+
+    def walk(self):
+        DemoAnimal.walk(self)
+        print("我会游")
 
     def speak(self):
         DemoAnimal.speak(self)
