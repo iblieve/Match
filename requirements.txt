@@ -8,3 +8,4 @@ PyMySQL
 numpy
 xlrd
 xlwt
+xlsxwriter
