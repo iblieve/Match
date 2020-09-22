@@ -9,3 +9,5 @@ numpy
 xlrd
 xlwt
 xlsxwriter
+openpyxl
+xlwings

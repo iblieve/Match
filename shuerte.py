@@ -15,18 +15,17 @@ import xlrd, xlwt
 import random
 import os
 import os.path
+form openpyxl.styles import Border, borders, colors, Side
 
-def dump_list_2_excel(p_data_list=None, p_excel_name='Excel_test.xls'):
-    import xlwt
-    # 创建一个workbook 设置编码
-    workbook = xlwt.Workbook(encoding='utf-8')
-    # 创建一个worksheet
-    worksheet = workbook.add_sheet('My Worksheet')
+G_N = 3
+G_START_ROW_INDEX = 0
 
-    row_index = 0
-    for stu in p_data_list:
+
+def dump_list_2_excel(workbook=None, worksheet=None, p_n=None, p_data_list=None, p_excel_name='Excel_test.xls'):
+    row_index = G_START_ROW_INDEX
+    for row_data in p_data_list:
         col_index = 0
-        for value in stu:
+        for value in row_data:
             style2 = xlwt.XFStyle()
             # 设置单元格对齐方式
             alignment = xlwt.Alignment()
@@ -55,47 +54,47 @@ def dump_list_2_excel(p_data_list=None, p_excel_name='Excel_test.xls'):
         first_row.set_style(tall_style)
         row_index += 1
     # 保存
-    workbook.save(p_excel_name)
+    #workbook.save(p_excel_name)
+    return workbook
 
 
 def schulte(n):
     '''return n*n'''
 
-    excel_title = []
+    excel_data_2d = []
 
     # 打乱数字
     max = n * n
     numbers = list(range(1, max + 1))  # 兼容py3
     random.shuffle(numbers)
 
-    # 格式化输出
-    # print()
-    # print('-' * 25)
     i = 0
-    group_index = 0
     while i < max:
-        top_10 = []
-
-        group_index += 1
-        # print('|\t', end='')
+        row_data = []
         for x in numbers[i: i + n]:
-            # print(x, '\t', end='')
-            print('-->%s' % x)
-
-            top_10.append(x)
-            pass
-        # print('|')
+            row_data.append(x)
         i += n
-        excel_title.append(top_10)
+        excel_data_2d.append(row_data)
 
-        print('\n%s' % group_index)
-    # print('-' * 25)
-
-    return excel_title, top_10
+    return excel_data_2d, row_data
 
 
-G_N = 4
-excel_title, top_10 = schulte(G_N)
-t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-dump_list_2_excel(p_data_list=excel_title, p_excel_name="top_10_{}.xls".format(t))
 
+import xlwt
+# 创建一个workbook 设置编码
+workbook = xlwt.Workbook(encoding='utf-8')
+# 创建一个worksheet
+worksheet = workbook.add_sheet('sheet1')
+
+
+for i in range(0, 3):
+    G_START_ROW_INDEX = (G_N + 15) * i
+
+    excel_data, top_10 = schulte(G_N)
+    t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
+    workbook = dump_list_2_excel(workbook=workbook, worksheet=worksheet, p_n=i, p_data_list=excel_data, p_excel_name="{}.xls".format(G_N))
+
+p_excel_name="{}.xls".format(G_N)
+if os.path.exists(p_excel_name):
+    os.remove(p_excel_name)
+workbook.save(p_excel_name)
