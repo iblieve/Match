@@ -5,6 +5,7 @@ import xlrd, xlwt
 from app.main.models.XAddress import XAddress
 from app.main.models.XGEODistanceStrategy import XGEODistanceStrategy
 from app.utils.XUtils import XUtils
+from app.main.XConstants import XConstants
 
 
 def main(p_argv):
@@ -74,14 +75,17 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # rst_lal = LALPctStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
 
         # Note 根据距离来判断(200米)
-        match_distance, real_distance = XGEODistanceStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+
+        new_address = XAddress(tmp_new_dict)
+        old_address = XAddress(p_old_dict)
+        match_distance, real_distance = XGEODistanceStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
         # real_distance = random.randint(0, 5000000)
         # 2个点的真实距离
         x = real_distance
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
+        rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
         # sim_string = random.random()
         # a是字符串相似度, b是距离相似度
         a = sim_string
@@ -98,7 +102,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         #       α就是你的FACTER权重
         # 如果没有
         #       b = 0
-        if XUtils.has_valid_lat_lng(p_old_dict):
+        if XUtils.has_valid_lat_lng(old_address):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
             b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE
             # b还影响匹配度， 但是影响程度非常低
