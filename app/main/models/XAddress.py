@@ -1,4 +1,6 @@
 import random
+
+
 class XAddress(object):
     order = -1
     address_no = -1
@@ -50,7 +52,7 @@ class XAddress(object):
         # 经度, 纬度
         self.longitude = p_dict['longitude']
         self.latitude = p_dict['latitude']
-        # self.has_valid_lat_lng = self._has_valid_lat_lng(p_longitude=self.longitude, p_latitude=self.latitude)
+        self.has_valid_lat_lng = self._has_valid_lat_lng(p_longitude=self.longitude, p_latitude=self.latitude)
         self.full_name = p_dict['locationName']
         self.full_name_prod = p_dict['address']
 

@@ -39,6 +39,9 @@ def main(p_argv):
 
         rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
 
+        print(rst)
+        print(sim)
+
         if rst is False:
             group_id += 1
             # 建立小组
@@ -94,6 +97,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # sim_string = random.random()
         # a是字符串相似度, b是距离相似度
         #a = sim_string
+        # NOTE 暂时强行设置字符串匹配度为1(即完全匹配), 这样可以使得流程能够正常跑通，将来再把字符串匹配算法加上。
         a = 1.0
 
         # 首先判断，已有地址的这一条数据有没有经纬度
@@ -108,7 +112,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         #       α就是你的FACTER权重
         # 如果没有
         #       b = 0
-        if old_address.has_valid_lat_lng :
+        if old_address.has_valid_lat_lng:
         #if XUtils.has_valid_lat_lng(old_address):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
             b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE

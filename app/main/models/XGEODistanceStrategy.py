@@ -13,6 +13,11 @@ class XGEODistanceStrategy(object):
         pass
 
     def _rad(self, d) -> (float):
+        """
+        NOTE 注意public private函数的定义方式, private函数一般以下划线开头, public则无需下划线开头
+        :param d:
+        :return:
+        """
         try:
             r = float(d) * float(pi) / float(180.0)
         except Exception as e:
