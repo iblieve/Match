@@ -4,6 +4,7 @@ import sys, datetime
 import xlrd, xlwt
 from app.main.models.XAddress import XAddress
 from app.main.models.XGEODistanceStrategy import XGEODistanceStrategy
+from app.main.models.XAddressStringDiffStrategy import XAddressStringDiffStrategy
 from app.utils.XUtils import XUtils
 from app.main.XConstants import XConstants
 
@@ -23,7 +24,7 @@ def main(p_argv):
     # XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
     x = XAddress(stock_addr_list[6])
     y = XAddress(stock_addr_list[8])
-    rst, real_distance = XGEODistanceStrategy.compare(x, y)
+    rst, real_distance = XGEODistanceStrategy().compare(p_address_a=x, p_address_b=y)
     print(rst)
     print(real_distance)
 
@@ -50,6 +51,10 @@ def main(p_argv):
         new_excel_list_grouped.append(tmp_dict)
         # Note 分组, 同一小组的记录具有相同group_id
         new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
+
+    # NOTE
+    #
+
 
     return 0
 
@@ -78,17 +83,18 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         new_address = XAddress(tmp_new_dict)
         old_address = XAddress(p_old_dict)
-        match_distance, real_distance = XGEODistanceStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
+        match_distance, real_distance = XGEODistanceStrategy().compare(p_address_a=new_address, p_address_b=old_address)
         # real_distance = random.randint(0, 5000000)
         # 2个点的真实距离
         x = real_distance
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
+        #rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
         # sim_string = random.random()
         # a是字符串相似度, b是距离相似度
-        a = sim_string
+        #a = sim_string
+        a = 1.0
 
         # 首先判断，已有地址的这一条数据有没有经纬度
         # 如果有
@@ -102,7 +108,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         #       α就是你的FACTER权重
         # 如果没有
         #       b = 0
-        if XUtils.has_valid_lat_lng(old_address):
+        if old_address.has_valid_lat_lng :
+        #if XUtils.has_valid_lat_lng(old_address):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
             b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE
             # b还影响匹配度， 但是影响程度非常低
