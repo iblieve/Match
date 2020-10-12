@@ -1,5 +1,7 @@
 import pymysql
 import xlrd
+from app.utils.XUtils import XUtils
+from app.main.models.XAddress import XAddress
 
 
 book = xlrd.open_workbook("resources/receiving_address_stock_1_ok.xls")
@@ -12,17 +14,22 @@ cursor = database.cursor()
 query = "INSERT IGNORE INTO tpoint (row_id, location_id, province_name, city_name, district_name, town_name, location_name, " \
         "address, longitude, latitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
 
-for r in range(1, sheet.nrows):
-    row_id = sheet.cell(r, 0).value
-    location_id = sheet.cell(r, 1).value
-    province_name = sheet.cell(r, 2).value
-    city_name = sheet.cell(r, 3).value
-    district_name = sheet.cell(r, 4).value
-    town_name = sheet.cell(r, 5).value
-    location_name = sheet.cell(r, 6).value
-    address = sheet.cell(r, 7).value
-    longitude = sheet.cell(r, 8).value
-    latitude = sheet.cell(r, 9).value
+excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
+resource = 'resources/receiving_address_stock_1_ok.xls'
+stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
+
+for i in range(len(stock_addr_list)):
+    data = XAddress(stock_addr_list[i])
+    row_id = data.order
+    location_id = data.address_no
+    province_name = data.province_name
+    city_name = data.city_name
+    district_name = data.district_name
+    town_name = data.town_name
+    location_name = data.full_name
+    address = data.full_name_prod
+    longitude = data.longitude
+    latitude = data.latitude
     values = (row_id, location_id, province_name, city_name, district_name, town_name, location_name, address, longitude, latitude)
 
     # 执行sql语句
