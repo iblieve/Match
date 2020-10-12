@@ -9,21 +9,21 @@ database = pymysql.connect(host="localhost", user="root", passwd="123456", db="m
 cursor = database.cursor()
 
 # 创建插入SQL语句
-query = "INSERT INTO tpoint (rowid, locationId, provinceName, cityName, districtName, townName, locationName, " \
+query = "INSERT IGNORE INTO tpoint (row_id, location_id, province_name, city_name, district_name, town_name, location_name, " \
         "address, longitude, latitude) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) "
 
 for r in range(1, sheet.nrows):
-    rowid = sheet.cell(r, 0).value
-    locationId = sheet.cell(r, 1).value
-    provinceName = sheet.cell(r, 2).value
-    cityName = sheet.cell(r, 3).value
-    districtName = sheet.cell(r, 4).value
-    townName = sheet.cell(r, 5).value
-    locationName = sheet.cell(r, 6).value
+    row_id = sheet.cell(r, 0).value
+    location_id = sheet.cell(r, 1).value
+    province_name = sheet.cell(r, 2).value
+    city_name = sheet.cell(r, 3).value
+    district_name = sheet.cell(r, 4).value
+    town_name = sheet.cell(r, 5).value
+    location_name = sheet.cell(r, 6).value
     address = sheet.cell(r, 7).value
     longitude = sheet.cell(r, 8).value
     latitude = sheet.cell(r, 9).value
-    values = (rowid, locationId, provinceName, cityName, districtName, townName, locationName, address, longitude, latitude)
+    values = (row_id, location_id, province_name, city_name, district_name, town_name, location_name, address, longitude, latitude)
 
     # 执行sql语句
     cursor.execute(query, values)
