@@ -45,7 +45,8 @@ class XAddress(object):
         self.province_name = p_dict['provinceName']
         self.city_code = -1
         self.city_name = p_dict['cityName']
-        self.district_code = p_dict['rowid']
+        self.order = p_dict['rowid']
+        self.address_no = p_dict['locationId']
         self.district_name = p_dict['districtName']
         self.town_code = -1
         self.town_name = p_dict['townName']
