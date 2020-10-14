@@ -1,11 +1,7 @@
 import pymysql
-import xlrd
 from app.utils.XUtils import XUtils
 from app.main.models.XAddress import XAddress
 
-
-book = xlrd.open_workbook("resources/receiving_address_stock_1_ok.xls")
-sheet = book.sheet_by_name("Sheet1")
 
 database = pymysql.connect(host="localhost", user="root", passwd="123456", db="mysql")
 cursor = database.cursor()
@@ -18,7 +14,8 @@ excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '
 resource = 'resources/receiving_address_stock_1_ok.xls'
 stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
 
-for i in range(len(stock_addr_list)):
+l = len(stock_addr_list)
+for i in range(l):
     data = XAddress(stock_addr_list[i])
     row_id = data.order
     location_id = data.address_no
@@ -46,6 +43,4 @@ database.close()
 
 # 打印结果
 print("Done!")
-columns = str(sheet.ncols)
-rows = str(sheet.nrows)
-print("我刚导入了{}列和{}行数据到MySQL!".format(columns, rows))
+
