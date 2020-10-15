@@ -15,6 +15,7 @@ resource = 'resources/receiving_address_stock_1_ok.xls'
 stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
 
 l = len(stock_addr_list)
+args = []
 for i in range(l):
     data = XAddress(stock_addr_list[i])
     row_id = data.order
@@ -28,9 +29,10 @@ for i in range(l):
     longitude = data.longitude
     latitude = data.latitude
     values = (row_id, location_id, province_name, city_name, district_name, town_name, location_name, address, longitude, latitude)
+    args.append(values)
 
-    # 执行sql语句
-    cursor.execute(query, values)
+# 执行sql语句
+cursor.executemany(query, args)
 
 # 关闭游标
 cursor.close()
