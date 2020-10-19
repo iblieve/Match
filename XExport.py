@@ -1,5 +1,6 @@
 import pymysql
 import xlwt
+from app.utils.XUtils import XUtils
 
 
 def export_excel(sql, excel_name, cur):
@@ -24,15 +25,23 @@ def export_excel(sql, excel_name, cur):
     book.save("%s.xls" % excel_name)
 
 
+
+
+
 if __name__ == '__main__':
-    host, user, passwd, db = '127.0.0.1', 'root', '123456', 'mysql'
-    conn = pymysql.connect(user=user, host=host, port=3306, passwd=passwd, db=db, charset='utf8')
-    cur = conn.cursor()
+    # host, user, passwd, db = '127.0.0.1', 'root', '123456', 'mysql'
+    # conn = pymysql.connect(user=user, host=host, port=3306, passwd=passwd, db=db, charset='utf8')
+    # cur = conn.cursor()
+    conn_success, conn, cur = XUtils.db_connect_with_pymysql(p_db_name='mysql')
+    if conn_success:
+        print('sql success connect')
     table_name = 'tpoint'
     query = 'select * from %s' % table_name
     city_name = '青岛市'
     query_1 = "SELECT DISTINCT * FROM tpoint t WHERE t.city_name = '" + city_name + "'"
     export_excel(query, 'tpoint', cur)
     export_excel(query_1, '青岛市', cur)
-    cur.close()
+    XUtils.db_close(p_cursor=cur, p_conn=conn)
+    # cur.close()
+    # conn.close()
 
