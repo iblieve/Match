@@ -11,6 +11,8 @@ import re
 import socket
 import urllib.request
 from urllib import parse
+import pymysql
+import sys
 
 
 class XUtils(object):
@@ -439,3 +441,46 @@ class XUtils(object):
         if os.path.exists(p_excel_name):
             os.remove(p_excel_name)
         book.save(p_excel_name)
+
+    @staticmethod
+    def db_connect_with_pymysql(p_db_name=None):
+        '''
+
+        :param p_db_name:
+        :param p_conf:
+        :return: success    : true indicate connect success, otherwise not.
+                 conn       : connection
+                 cursor     : cursor
+        '''
+
+        success = False
+        conn = None
+        cur = None
+        try:
+            host, user, passwd = '127.0.0.1', 'root', '123456'
+            conn = pymysql.connect(user=user, host=host, port=3306, passwd=passwd, db=p_db_name, charset='utf8')
+            cur = conn.cursor()
+            success = True
+        except Exception as e:
+            print
+            e.message
+            import traceback
+            traceback.print_exc()
+            if conn is not None:
+                conn.rollback()
+            success = False
+            conn = None
+            cur = None
+
+        return success, conn, cur
+
+
+    @staticmethod
+    def db_close(p_cursor=None, p_conn=None):
+        try:
+            p_cursor.close()
+            p_conn.close()
+        except Exception as e:
+            print >> sys.stderr, "MySQLException", str(e)
+
+
