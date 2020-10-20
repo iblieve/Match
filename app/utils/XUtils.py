@@ -443,7 +443,7 @@ class XUtils(object):
         book.save(p_excel_name)
 
     @staticmethod
-    def db_connect_with_pymysql(p_db_name=None):
+    def db_connect_with_pymysql(p_user=None, p_host=None, p_passwd=None, p_db_name=None, p_charset=None):
         '''
 
         :param p_db_name:
@@ -457,8 +457,7 @@ class XUtils(object):
         conn = None
         cur = None
         try:
-            host, user, passwd = '127.0.0.1', 'root', '123456'
-            conn = pymysql.connect(user=user, host=host, port=3306, passwd=passwd, db=p_db_name, charset='utf8')
+            conn = pymysql.connect(user=p_user, host=p_host, port=3306, passwd=p_passwd, db=p_db_name, charset=p_charset)
             cur = conn.cursor()
             success = True
         except Exception as e:
@@ -474,7 +473,6 @@ class XUtils(object):
 
         return success, conn, cur
 
-
     @staticmethod
     def db_close(p_cursor=None, p_conn=None):
         try:
@@ -482,5 +480,45 @@ class XUtils(object):
             p_conn.close()
         except Exception as e:
             print >> sys.stderr, "MySQLException", str(e)
+
+    @staticmethod
+    def execute_sql(p_sql=None, p_cur=None, p_conn=None):
+        success = False
+        if p_sql is not None:
+            try:
+                p_cur.execute(p_sql)
+                p_conn.commit()
+                success = True
+            except Exception as e:
+                success = False
+                print >> sys.stderr, "MySQLException", p_sql, str(e)
+        return success
+
+    @staticmethod
+    def executemany_sql(p_sql=None, p_cur=None, p_conn=None, p_param=None):
+        success = False
+        if p_sql is not None and p_param is not None and len(p_param) > 0:
+            try:
+                p_cur.executemany(p_sql, p_param)
+                p_conn.commit()
+                success = True
+            except Exception as e:
+                success = False
+                print >> sys.stderr, "MySQLException", p_sql, str(e)
+        return success
+
+    @staticmethod
+    def fetchall_sql(p_sql=None, p_cur=None):
+        success = False
+        results = tuple()
+        try:
+            p_cur.execute(p_sql)
+            results = p_cur.fetchall()
+            success = True
+        except Exception as e:
+            success = False
+            results = tuple()
+            print >> sys.stderr, "MySQLException", p_sql, str(e)
+        return success, results
 
 
