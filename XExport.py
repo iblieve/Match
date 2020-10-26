@@ -30,6 +30,7 @@ def export_excel(sql, excel_name, cur, conn):
 
 
 
+
 if __name__ == '__main__':
     # host, user, passwd, db = '127.0.0.1', 'root', '123456', 'mysql'
     # conn = pymysql.connect(user=user, host=host, port=3306, passwd=passwd, db=db, charset='utf8')

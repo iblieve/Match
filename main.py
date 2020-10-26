@@ -7,12 +7,18 @@ from app.main.models.XGEODistanceStrategy import XGEODistanceStrategy
 from app.main.models.XAddressStringDiffStrategy import XAddressStringDiffStrategy
 from app.utils.XUtils import XUtils
 from app.main.XConstants import XConstants
+from XExport import export_excel
 
 
 def main(p_argv):
     # excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
     excel_title = ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
-    resource = 'resources/receiving_address_stock_1_ok.xls'
+    conn_success, conn, cur = XUtils.db_connect_with_pymysql(p_user='root', p_host='127.0.0.1', p_passwd='123456',
+                                                             p_db_name='mysql', p_charset='utf8')
+    table_name = 'tpoint'
+    query = 'select * from %s' % table_name
+    export_excel(query, 'tpoint', cur, conn)
+    resource = 'tpoint.xls'
     stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
     top_10 = []
     for i in range(0, 10):
