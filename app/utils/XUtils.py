@@ -443,7 +443,7 @@ class XUtils(object):
         book.save(p_excel_name)
 
     @staticmethod
-    def db_connect_with_pymysql(p_user=None, p_host=None, p_passwd=None, p_db_name=None, p_charset=None):
+    def db_connect_with_pymysql(p_user=None, p_host=None, p_port=3306, p_passwd=None, p_db_name=None, p_charset=None):
         '''
 
         :param p_db_name:
@@ -457,7 +457,7 @@ class XUtils(object):
         conn = None
         cur = None
         try:
-            conn = pymysql.connect(user=p_user, host=p_host, port=3306, passwd=p_passwd, db=p_db_name, charset=p_charset)
+            conn = pymysql.connect(user=p_user, host=p_host, port=p_port, passwd=p_passwd, db=p_db_name, charset=p_charset)
             cur = conn.cursor()
             success = True
         except Exception as e:
