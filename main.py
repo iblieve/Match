@@ -8,40 +8,21 @@ from app.main.models.XAddressStringDiffStrategy import XAddressStringDiffStrateg
 from app.utils.XUtils import XUtils
 from app.main.XConstants import XConstants
 from XExport import export_excel
+from XSqlalchemy import create_list
 
 
 def main(p_argv):
-    # excel_title = ['group_id', '序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度']
-    title = ['rowid', 'locationId', 'provinceName', 'cityName', 'districtName', 'townName', 'locationName', 'address', 'longitude', 'latitude']
-    conn_success, conn, cur = XUtils.db_connect_with_pymysql(p_user='root', p_host='127.0.0.1', p_passwd='123456',
-                                                             p_db_name='mysql', p_charset='utf8')
-    table_name = 'tpoint'
-    query = 'select * from %s' % table_name
-    success, result = XUtils.fetchall_sql(p_sql=query, p_cur=cur)
-    length_sql = len(result)
-    length_row = len(result[0])
-    stock_addr_list = []
-    for i in range(length_sql):
-        stock_addr_dict = {}
-        for j in range(length_row):
-            stock_addr_dict[title[j]] = result[i][j]
-        stock_addr_list.append(stock_addr_dict)
-    #for x in excel_title:
-    # table_name = 'tpoint'
-    # query = 'select * from %s' % table_name
-    # export_excel(query, 'tpoint', cur, conn)
-    # resource = 'tpoint.xls'
-    # stock_addr_list = XUtils.excel_to_list(p_read_excel_file_path=resource, p_sheet_name='Sheet1', p_excel_title_list=excel_title)
+    addr_list = fetch_all_address_by(dialect='mysql', driver='pymysql', username='root', password='123456', database='mysql')
     top_10 = []
     for i in range(0, 10):
-        tmp_dict = stock_addr_list[i]
+        tmp_dict = addr_list[i]
         tmp_dict['group_id'] = 0
         top_10.append(tmp_dict)
         # print(tmp_dict["rowid"])
     t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
     # XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
-    x = XAddress(stock_addr_list[6])
-    y = XAddress(stock_addr_list[8])
+    x = XAddress(addr_list[6])
+    y = XAddress(addr_list[8])
     rst, real_distance = XGEODistanceStrategy().compare(p_address_a=x, p_address_b=y)
     print(rst)
     print(real_distance)
@@ -53,7 +34,7 @@ def main(p_argv):
     new_excel_dict_grouped = {}
     new_excel_list_grouped = []
     group_id = 0
-    for tmp_dict in stock_addr_list:
+    for tmp_dict in addr_list:
 
         rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
 
@@ -78,6 +59,45 @@ def main(p_argv):
 
 
     return 0
+
+
+# def fetch_all_address_by(p_user=None, p_host=None, p_passwd=None, p_db_name=None, p_charset=None)->(list):
+#     title = ['rowid', 'locationId', 'provinceName', 'cityName', 'districtName', 'townName', 'locationName', 'address',
+#              'longitude', 'latitude']
+#     conn_success, conn, cur = XUtils.db_connect_with_pymysql(p_user=p_user, p_host=p_host, p_passwd=p_passwd,
+#                                                              p_db_name=p_db_name, p_charset=p_charset)
+#     table_name = 'tpoint'
+#     query = 'select * from %s' % table_name
+#     success, result = XUtils.fetchall_sql(p_sql=query, p_cur=cur)
+#     length_sql = len(result)
+#     length_row = len(result[0])
+#     stock_addr_list = []
+#     for i in range(length_sql):
+#         stock_addr_dict = {}
+#         for j in range(length_row):
+#             stock_addr_dict[title[j]] = result[i][j]
+#         stock_addr_list.append(stock_addr_dict)
+#     return stock_addr_list
+
+
+def fetch_all_address_by(dialect=None, driver=None, username=None, password=None, database=None)->(list):
+    result = create_list(dialect=dialect, driver=driver, username=username, password=password, database=database)
+    length_sql = len(result)
+    stock_addr_list = []
+    for i in range(length_sql):
+        stock_addr_dict = {}
+        stock_addr_dict['rowid'] = result[i].row_id
+        stock_addr_dict['locationId'] = result[i].location_id
+        stock_addr_dict['provinceName'] = result[i].province_name
+        stock_addr_dict['cityName'] = result[i].city_name
+        stock_addr_dict['districtName'] = result[i].district_name
+        stock_addr_dict['townName'] = result[i].town_name
+        stock_addr_dict['locationName'] = result[i].location_name
+        stock_addr_dict['address'] = result[i].address
+        stock_addr_dict['longitude'] = result[i].longitude
+        stock_addr_dict['latitude'] = result[i].latitude
+        stock_addr_list.append(stock_addr_dict)
+    return stock_addr_list
 
 
 def contains(p_new_excel_list=None, p_old_dict=None):
