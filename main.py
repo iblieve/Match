@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
+import os
 import sys, datetime
 import xlrd, xlwt
 from app.main.models.XAddress import XAddress
@@ -8,11 +9,22 @@ from app.main.models.XAddressStringDiffStrategy import XAddressStringDiffStrateg
 from app.utils.XUtils import XUtils
 from app.main.XConstants import XConstants
 from XExport import export_excel
-from XSqlalchemy import create_list
+from XRead_data import create_list
+from config import app_config, ProductionConfig, DevelopmentConfig
 
 
 def main(p_argv):
-    addr_list = fetch_all_address_by(dialect='mysql', driver='pymysql', username='root', password='123456', database='mysql')
+    profile = p_argv[1] if len(p_argv) > 1 else 'dev'
+    #
+    config = app_config[profile]
+    if os.getenv('DB_HOST') is not None:
+        config.DB_HOST = os.environ.get('DB_HOST')
+        config.DB_PORT = os.environ.get('DB_PORT')
+        config.DB_USER = os.environ['DB_USER']
+        config.DB_PASSWORD = os.environ['DB_PASSWORD']
+        config.DB_INSTANCE_NAME = os.environ['DB_INSTANCE_NAME']
+        config.DB_CHARSET = os.environ['DB_CHARSET']
+    addr_list = fetch_all_address_by(dialect='mysql', driver='pymysql')
     top_10 = []
     for i in range(0, 10):
         tmp_dict = addr_list[i]
@@ -79,8 +91,8 @@ def main(p_argv):
 #     return stock_addr_list
 
 
-def fetch_all_address_by(dialect=None, driver=None, username=None, password=None, database=None) -> (list):
-    result = create_list(dialect=dialect, driver=driver, username=username, password=password, database=database)
+def fetch_all_address_by(dialect=None, driver=None) -> (list):
+    result = create_list(dialect=dialect, driver=driver)
     length_sql = len(result)
     stock_addr_list = []
     for i in range(length_sql):
