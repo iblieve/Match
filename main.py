@@ -74,21 +74,22 @@ def main(p_argv=None):
 
 
 def fetch_all_address_by(p_config=None) -> (list):
-    result = create_list(p_config=p_config)
-    length_sql = len(result)
+    results = create_list(p_config=p_config)
+    length_sql = len(results)
     stock_addr_list = []
+    # FIXME results 内已经是Tpoint对象了， 此处FOR循环为何还要把一个对象翻译成dict呢？ 一般而言用dict/map来存储数据是软件开发的大忌。
     for i in range(length_sql):
         stock_addr_dict = {}
-        stock_addr_dict['rowid'] = result[i].row_id
-        stock_addr_dict['locationId'] = result[i].location_id
-        stock_addr_dict['provinceName'] = result[i].province_name
-        stock_addr_dict['cityName'] = result[i].city_name
-        stock_addr_dict['districtName'] = result[i].district_name
-        stock_addr_dict['townName'] = result[i].town_name
-        stock_addr_dict['locationName'] = result[i].location_name
-        stock_addr_dict['address'] = result[i].address
-        stock_addr_dict['longitude'] = result[i].longitude
-        stock_addr_dict['latitude'] = result[i].latitude
+        stock_addr_dict['rowid'] = results[i].row_id
+        stock_addr_dict['locationId'] = results[i].location_id
+        stock_addr_dict['provinceName'] = results[i].province_name
+        stock_addr_dict['cityName'] = results[i].city_name
+        stock_addr_dict['districtName'] = results[i].district_name
+        stock_addr_dict['townName'] = results[i].town_name
+        stock_addr_dict['locationName'] = results[i].location_name
+        stock_addr_dict['address'] = results[i].address
+        stock_addr_dict['longitude'] = results[i].longitude
+        stock_addr_dict['latitude'] = results[i].latitude
         stock_addr_list.append(stock_addr_dict)
     return stock_addr_list
 
