@@ -2,6 +2,9 @@ from sqlalchemy import Column, String, create_engine, Integer, Float
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
+from models import Tpoint
+
+
 Base = declarative_base()
 
 

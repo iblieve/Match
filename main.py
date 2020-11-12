@@ -57,7 +57,6 @@ def main(p_argv):
     # NOTE
     #
 
-
     return 0
 
 
@@ -80,7 +79,7 @@ def main(p_argv):
 #     return stock_addr_list
 
 
-def fetch_all_address_by(dialect=None, driver=None, username=None, password=None, database=None)->(list):
+def fetch_all_address_by(dialect=None, driver=None, username=None, password=None, database=None) -> (list):
     result = create_list(dialect=dialect, driver=driver, username=username, password=password, database=database)
     length_sql = len(result)
     stock_addr_list = []
@@ -131,10 +130,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
-        #rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
+        # rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
         # sim_string = random.random()
         # a是字符串相似度, b是距离相似度
-        #a = sim_string
+        # a = sim_string
         # NOTE 暂时强行设置字符串匹配度为1(即完全匹配), 这样可以使得流程能够正常跑通，将来再把字符串匹配算法加上。
         a = 1.0
 
@@ -151,7 +150,7 @@ def contains(p_new_excel_list=None, p_old_dict=None):
         # 如果没有
         #       b = 0
         if old_address.has_valid_lat_lng:
-        #if XUtils.has_valid_lat_lng(old_address):
+            # if XUtils.has_valid_lat_lng(old_address):
             # 计算根据距离算出来的相似度. 其中x是求大圆算出来的距离， 即2个点的真实距离
             b = (XConstants.FIXED_DISTANCE - x) / XConstants.FIXED_DISTANCE
             # b还影响匹配度， 但是影响程度非常低
