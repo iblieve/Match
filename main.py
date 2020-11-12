@@ -13,18 +13,19 @@ from XRead_data import create_list
 from config import app_config, ProductionConfig, DevelopmentConfig
 
 
-def main(p_argv):
+def main(p_argv=None):
     profile = p_argv[1] if len(p_argv) > 1 else 'dev'
     #
     config = app_config[profile]
     if os.getenv('DB_HOST') is not None:
-        config.DB_HOST = os.environ.get('DB_HOST')
-        config.DB_PORT = os.environ.get('DB_PORT')
-        config.DB_USER = os.environ['DB_USER']
-        config.DB_PASSWORD = os.environ['DB_PASSWORD']
-        config.DB_INSTANCE_NAME = os.environ['DB_INSTANCE_NAME']
-        config.DB_CHARSET = os.environ['DB_CHARSET']
-    addr_list = fetch_all_address_by(dialect='mysql', driver='pymysql')
+        config.DB_HOST = os.getenv('DB_HOST')
+        config.DB_PORT = os.getenv('DB_PORT')
+        config.DB_USER = os.getenv('DB_USER')
+        config.DB_PASSWORD = os.getenv('DB_PASSWORD')
+        config.DB_INSTANCE_NAME = os.getenv('DB_INSTANCE_NAME')
+        config.DB_CHARSET = os.getenv('DB_CHARSET')
+
+    addr_list = fetch_all_address_by(p_config=config)
     top_10 = []
     for i in range(0, 10):
         tmp_dict = addr_list[i]
@@ -72,27 +73,8 @@ def main(p_argv):
     return 0
 
 
-# def fetch_all_address_by(p_user=None, p_host=None, p_passwd=None, p_db_name=None, p_charset=None)->(list):
-#     title = ['rowid', 'locationId', 'provinceName', 'cityName', 'districtName', 'townName', 'locationName', 'address',
-#              'longitude', 'latitude']
-#     conn_success, conn, cur = XUtils.db_connect_with_pymysql(p_user=p_user, p_host=p_host, p_passwd=p_passwd,
-#                                                              p_db_name=p_db_name, p_charset=p_charset)
-#     table_name = 'tpoint'
-#     query = 'select * from %s' % table_name
-#     success, result = XUtils.fetchall_sql(p_sql=query, p_cur=cur)
-#     length_sql = len(result)
-#     length_row = len(result[0])
-#     stock_addr_list = []
-#     for i in range(length_sql):
-#         stock_addr_dict = {}
-#         for j in range(length_row):
-#             stock_addr_dict[title[j]] = result[i][j]
-#         stock_addr_list.append(stock_addr_dict)
-#     return stock_addr_list
-
-
-def fetch_all_address_by(dialect=None, driver=None) -> (list):
-    result = create_list(dialect=dialect, driver=driver)
+def fetch_all_address_by(p_config=None) -> (list):
+    result = create_list(p_config=p_config)
     length_sql = len(result)
     stock_addr_list = []
     for i in range(length_sql):
