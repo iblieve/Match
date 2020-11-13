@@ -15,7 +15,6 @@ class XAddress(Tpoint):
     NOTE 此项目，我们采用继承来扩展Tpoint。
     NOTE
     """
-    has_valid_lat_lng = True
 
     # 标准地址
     std_addr = None
@@ -28,14 +27,11 @@ class XAddress(Tpoint):
 
     def __init__(self):
         super(Tpoint, self).__init__()
-        # ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
-        # 省,市,区/县,乡镇
-        self.has_valid_lat_lng = self._has_valid_lat_lng(p_longitude=self.longitude, p_latitude=self.latitude)
         self.is_new_std_addr = None
 
-    def _has_valid_lat_lng(self, p_longitude=None, p_latitude=None) -> (bool):
+    def has_valid_lat_lng(self) -> (bool):
         try:
-            (1.0 / p_longitude) and (1.0 / p_latitude)
+            (1.0 / float(self.longitude)) and (1.0 / float(self.latitude))
             ok = True
         except Exception as e:
             ok = False

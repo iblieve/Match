@@ -38,5 +38,11 @@ def create_list(p_config=None):
     #results = session.query(Tpoint).all()
     results = session.query(XAddress).all()
 
+    # NOTE 测试一下XAddress的方法是不是有效, 即XAddress的一些自有属性和方法丢失了。 理论上是不会丢失的
+    addr = results[0]
+    addr.is_north_or_south()
+    v = addr.has_valid_lat_lng()
+    print(v)
+
     session.close()
     return results
