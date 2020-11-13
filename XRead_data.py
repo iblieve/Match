@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
 from models import Tpoint
-
+from app.main.models.XAddress import XAddress
 
 def create_list(p_config=None):
     """
@@ -35,6 +35,8 @@ def create_list(p_config=None):
     DBSession = sessionmaker(bind=engine)
     session = DBSession()
     # 创建Query查询，filter是where条件，最后调用one()返回唯一行，如果调用all()则返回所有行:
-    results = session.query(Tpoint).all()
+    #results = session.query(Tpoint).all()
+    results = session.query(XAddress).all()
+
     session.close()
     return results

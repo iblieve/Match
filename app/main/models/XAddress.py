@@ -1,25 +1,20 @@
 import random
 
+from models import Tpoint
 
-class XAddress(object):
-    order = -1
-    address_no = -1
-    district_code = -1
-    # 省,市,区/县,乡镇
-    province_name = None
-    city_name = None
-    district_name = None
-    town_name = None
 
-    # 详细地址（拼接省市区）
-    full_name = None
-
-    # 详细地址(PROD地址)
-    full_name_prod = None
-
-    # 经度, 纬度
-    longitude = -1
-    latitude = -1
+class XAddress(Tpoint):
+    """
+    NOTE
+    NOTE 此处有一个问题，生成的entry如果需要扩展(添加属性或方法)的需求, 如何处理? 例如Tpoint需要有个新字段/方法来对外表达自己有一对正确或
+    NOTE 错误的经纬度.
+    NOTE
+    NOTE models.py文件是不允许修改的; 因为DB有可能有变化, 一旦有变化, 就需要重新生成models.py; 那么之前人工修改过的东西会全部丢失。
+    NOTE 故，只能通过继承或合成的方式来扩展Entry.
+    NOTE
+    NOTE 此项目，我们采用继承来扩展Tpoint。
+    NOTE
+    """
     has_valid_lat_lng = True
 
     # 标准地址
@@ -31,31 +26,12 @@ class XAddress(object):
     # true indicate stock addr, otherwise increment addr
     is_stock = False
 
-    __is_valid_data__ = True
-    __message__ = None
-
-    # 北极与南极的纬度
-    south_pole_longtitude = '90S'
-    north_pole_longtitude = '90N'
-
-    def __init__(self, p_dict: dict = None):
+    def __init__(self):
+        super(Tpoint, self).__init__()
         # ['序号', '地址编号', '省份', '城市', '区/县', '乡', '详细地址（拼接省市区）', '详细地址(PROD地址)', '经度', '纬度', '标准地址', '标准地址是否新地址']
         # 省,市,区/县,乡镇
-        self.province_code = -1
-        self.province_name = p_dict['provinceName']
-        self.city_code = -1
-        self.city_name = p_dict['cityName']
-        self.order = p_dict['rowid']
-        self.address_no = p_dict['locationId']
-        self.district_name = p_dict['districtName']
-        self.town_code = -1
-        self.town_name = p_dict['townName']
-        # 经度, 纬度
-        self.longitude = p_dict['longitude']
-        self.latitude = p_dict['latitude']
         self.has_valid_lat_lng = self._has_valid_lat_lng(p_longitude=self.longitude, p_latitude=self.latitude)
-        self.full_name = p_dict['locationName']
-        self.full_name_prod = p_dict['address']
+        self.is_new_std_addr = None
 
     def _has_valid_lat_lng(self, p_longitude=None, p_latitude=None) -> (bool):
         try:
