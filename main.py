@@ -25,20 +25,8 @@ def main(p_argv=None):
         config.DB_INSTANCE_NAME = os.getenv('DB_INSTANCE_NAME')
         config.DB_CHARSET = os.getenv('DB_CHARSET')
 
-    addr_list = fetch_all_address_by(p_config=config)
-    top_10 = []
-    for i in range(0, 10):
-        tmp_dict = addr_list[i]
-        tmp_dict['group_id'] = 0
-        top_10.append(tmp_dict)
-        # print(tmp_dict["rowid"])
-    t = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S')
-    # XUtils.dump_list_2_excel(p_title_list=excel_title_1, p_data_list=top_10, p_excel_name="top_10_{}.xls".format(t))
-    x = XAddress(addr_list[6])
-    y = XAddress(addr_list[8])
-    rst, real_distance = XGEODistanceStrategy().compare(p_address_a=x, p_address_b=y)
-    print(rst)
-    print(real_distance)
+    # addr_list = fetch_all_address_by(p_config=config)
+    addr_list = create_list(p_config=config)
 
     # Note 总共生成两个表，算上原始表就有三个
     # Note 假如说第一个数据进来，直接就扔到第二个表里，给他一个编号1.第二个进来跟第一个比较，然后没匹配上扔到表2给他一个编号2.第三个进来了，跟前两个比较，
@@ -59,39 +47,18 @@ def main(p_argv=None):
             # 建立小组
             new_excel_dict_grouped[str(group_id)] = []
             # Note 加一列数据group_id
-            tmp_dict['group_id'] = group_id
+            tmp_dict.group_id = group_id
         else:
             # Note 此处要非常注意， 应该使用它兄弟的group_id, 而不是使用最新的group_id
-            tmp_dict['group_id'] = brother_dict['group_id']
+            tmp_dict.group_id = brother_dict.group_id
         new_excel_list_grouped.append(tmp_dict)
         # Note 分组, 同一小组的记录具有相同group_id
-        new_excel_dict_grouped[str(tmp_dict['group_id'])].append(tmp_dict)
+        new_excel_dict_grouped[str(tmp_dict.group_id)].append(tmp_dict)
 
     # NOTE
     #
 
     return 0
-
-
-def fetch_all_address_by(p_config=None) -> (list):
-    results = create_list(p_config=p_config)
-    length_sql = len(results)
-    stock_addr_list = []
-    # FIXME results 内已经是Tpoint对象了， 此处FOR循环为何还要把一个对象翻译成dict呢？ 一般而言用dict/map来存储数据是软件开发的大忌。
-    for i in range(length_sql):
-        stock_addr_dict = {}
-        stock_addr_dict['rowid'] = results[i].row_id
-        stock_addr_dict['locationId'] = results[i].location_id
-        stock_addr_dict['provinceName'] = results[i].province_name
-        stock_addr_dict['cityName'] = results[i].city_name
-        stock_addr_dict['districtName'] = results[i].district_name
-        stock_addr_dict['townName'] = results[i].town_name
-        stock_addr_dict['locationName'] = results[i].location_name
-        stock_addr_dict['address'] = results[i].address
-        stock_addr_dict['longitude'] = results[i].longitude
-        stock_addr_dict['latitude'] = results[i].latitude
-        stock_addr_list.append(stock_addr_dict)
-    return stock_addr_list
 
 
 def contains(p_new_excel_list=None, p_old_dict=None):
@@ -116,8 +83,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 根据距离来判断(200米)
 
-        new_address = XAddress(tmp_new_dict)
-        old_address = XAddress(p_old_dict)
+        new_address = tmp_new_dict
+        old_address = p_old_dict
         match_distance, real_distance = XGEODistanceStrategy().compare(p_address_a=new_address, p_address_b=old_address)
         # real_distance = random.randint(0, 5000000)
         # 2个点的真实距离
@@ -164,13 +131,13 @@ def contains(p_new_excel_list=None, p_old_dict=None):
             # 一旦匹配到一个兄弟后， 就认为成功, 后续就无需再考虑rst了， 后续就是去找匹配度更高的兄弟即可
             rst = sim >= 0.6
 
-        tmp_new_dict['sim'] = sim
+        tmp_new_dict.sim = sim
 
         # Note 取得sim 最大的作为兄弟返回
         if rst is True:
-            if brother_dict is None or tmp_new_dict['sim'] > brother_dict['sim']:
+            if brother_dict is None or tmp_new_dict.sim > brother_dict.sim:
                 brother_dict = tmp_new_dict
-                max_sim = brother_dict['sim']
+                max_sim = brother_dict.sim
 
     return rst, brother_dict, max_sim
 

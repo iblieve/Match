@@ -16,6 +16,9 @@ class XAddress(Tpoint):
     NOTE
     """
 
+    group_id = None
+    sim = None
+
     # 标准地址
     std_addr = None
 
