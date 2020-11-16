@@ -32,12 +32,12 @@ def main(p_argv=None):
     # Note 假如说第一个数据进来，直接就扔到第二个表里，给他一个编号1.第二个进来跟第一个比较，然后没匹配上扔到表2给他一个编号2.第三个进来了，跟前两个比较，
     # Note 假如说匹配到了1，我们给他也扔到表2里给编号1。。。这样的话表2就会有4636-150个数据，但是每一数据都有一个编号。然后在根据这个编号顺序排一下，这样就把相同的归在一起了
     # Note 这个是把相同/类似的地址 编一个相同的号，  相当于分组
-    new_excel_dict_grouped = {}
+    new_excel_data_grouped = {}
     new_excel_list_grouped = []
     group_id = 0
-    for tmp_dict in addr_list:
+    for tmp_data in addr_list:
 
-        rst, brother_dict, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_dict=tmp_dict)
+        rst, brother_data, sim = contains(p_new_excel_list=new_excel_list_grouped, p_old_data=tmp_data)
 
         print(rst)
         print(sim)
@@ -45,15 +45,15 @@ def main(p_argv=None):
         if rst is False:
             group_id += 1
             # 建立小组
-            new_excel_dict_grouped[str(group_id)] = []
+            new_excel_data_grouped[str(group_id)] = []
             # Note 加一列数据group_id
-            tmp_dict.group_id = group_id
+            tmp_data.group_id = group_id
         else:
             # Note 此处要非常注意， 应该使用它兄弟的group_id, 而不是使用最新的group_id
-            tmp_dict.group_id = brother_dict.group_id
-        new_excel_list_grouped.append(tmp_dict)
+            tmp_data.group_id = brother_data.group_id
+        new_excel_list_grouped.append(tmp_data)
         # Note 分组, 同一小组的记录具有相同group_id
-        new_excel_dict_grouped[str(tmp_dict.group_id)].append(tmp_dict)
+        new_excel_data_grouped[str(tmp_data.group_id)].append(tmp_data)
 
     # NOTE
     #
@@ -61,7 +61,7 @@ def main(p_argv=None):
     return 0
 
 
-def contains(p_new_excel_list=None, p_old_dict=None):
+def contains(p_new_excel_list=None, p_old_data=None):
     """
     判断
     :param p_new_excel_list:
@@ -70,10 +70,10 @@ def contains(p_new_excel_list=None, p_old_dict=None):
     """
     rst = False
     max_sim = -3721.4728
-    brother_dict = None
+    brother_data = None
 
     # 竟然没有SIM ？？？？？？？？？？？？？？
-    for tmp_new_dict in p_new_excel_list:
+    for tmp_new_data in p_new_excel_list:
 
         # Note 利用余弦相似度公式计算两字符串的相似性 (相似度达到0.8则认为是一个地址，否则是2个不同地址, 这个0.8我是随便写的, 可修改)
         # rst_cos_sim = CosineSimilarityStrategy().compare(p_address_dict_a=tmp_new_dict, p_address_dict_b=p_old_dict)
@@ -83,8 +83,8 @@ def contains(p_new_excel_list=None, p_old_dict=None):
 
         # Note 根据距离来判断(200米)
 
-        new_address = tmp_new_dict
-        old_address = p_old_dict
+        new_address = tmp_new_data
+        old_address = p_old_data
         match_distance, real_distance = XGEODistanceStrategy().compare(p_address_a=new_address, p_address_b=old_address)
         # real_distance = random.randint(0, 5000000)
         # 2个点的真实距离
@@ -131,15 +131,15 @@ def contains(p_new_excel_list=None, p_old_dict=None):
             # 一旦匹配到一个兄弟后， 就认为成功, 后续就无需再考虑rst了， 后续就是去找匹配度更高的兄弟即可
             rst = sim >= 0.6
 
-        tmp_new_dict.sim = sim
+        tmp_new_data.sim = sim
 
         # Note 取得sim 最大的作为兄弟返回
         if rst is True:
-            if brother_dict is None or tmp_new_dict.sim > brother_dict.sim:
-                brother_dict = tmp_new_dict
-                max_sim = brother_dict.sim
+            if brother_data is None or tmp_new_data.sim > brother_data.sim:
+                brother_data = tmp_new_data
+                max_sim = brother_data.sim
 
-    return rst, brother_dict, max_sim
+    return rst, brother_data, max_sim
 
 
 if __name__ == '__main__':
