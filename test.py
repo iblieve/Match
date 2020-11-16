@@ -10,37 +10,30 @@ from app.main.models.DemoDog import DemoDog
 from app.main.models.DemoFish import DemoFish
 from app.main.models.DemoSnake import DemoSnake
 
-
-def speak(obj,blood):
-    obj.speak(blood)
+from Stack import Stack
 
 
-def main(p_argv):
-    cat = DemoCat()
-    cat.catch_mouse()
-    speak(cat, "AB")
-    cat.walk()
-    
-    print('\n')
-
-    dog = DemoDog()
-    dog.bite()
-    dog.speak()
-    dog.walk()
+def main(p_argv=None):
+    stack = Stack[int]()
+    stack.push(2)
+    stack.pop()
+    stack.push('x')  # Type error
 
     print('\n')
 
-    fish = DemoFish()
-    fish.swim()
-    fish.speak()
-    fish.walk()
+    stack = Stack[DemoFish]()
+    stack.push(DemoFish())
+    item = stack.pop()
+    item.speak()
 
     print('\n')
 
-    snake = DemoSnake()
-    snake.venom()
-    snake.speak()
-    snake.walk()
+    stack = Stack[DemoDog]()
+    stack.push(DemoDog())
+    item = stack.pop()
+    item.speak()
+
+    print('\n')
 
     return 0
 
