@@ -23,6 +23,8 @@ class Stack(Generic[T]):
         :param item:
         :return:
         """
+        print(type(item))
+        print(T)
         self.items.append(item)
 
     def pop(self) -> (T):

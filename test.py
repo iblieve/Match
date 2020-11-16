@@ -16,8 +16,11 @@ from Stack import Stack
 def main(p_argv=None):
     stack = Stack[int]()
     stack.push(2)
-    stack.pop()
+    item = stack.pop()
+    print(item)
     stack.push('x')  # Type error
+    item = stack.pop()
+    print(item)
 
     print('\n')
 
