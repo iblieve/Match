@@ -1,33 +1,38 @@
 from datetime import datetime
+from threading import Timer
 import time
 import random
 
 
-def timer_pause(a, b):
-    for i in range(b):
-        timer_A(a)
+def timer_A_pause(a):
+    timer_A()
+    time.sleep(a)
+    timer.cancel()
 
 
-def timer_A(a):
+def timer_A():
     temp = random.random()
     ticktock(temp)
-    time.sleep(a)
+    global timer
+    timer = Timer(5, timer_A)
+    timer.start()
 
 
-def timer_B(a, b):
-    time.sleep(a)
-    while True:
-        temp = random.random()
-        ticktock(temp)
-        time.sleep(b)
+def timer_B():
+    # timer = Timer(60, timer_B)
+    # timer.start()
+    # print(datetime.now().strftime("%Y-%m-%d  %H:%M:%S"))
+    # print("123")
+    # timer_A()
+    time.sleep(30)
+    timer_A()
 
 
 def ticktock(n):
     print(datetime.now().strftime("%Y-%m-%d  %H:%M:%S"))
     print('ticktock')
     print(n)
-    pass
 
 
-timer_pause(5, 5)
-timer_B(30, 5)
+timer_A_pause(30)
+timer_B()
