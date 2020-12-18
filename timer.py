@@ -31,3 +31,6 @@ def ticktock(n):
 
 timer_pause(5, 5)
 timer_B(30, 5)
+
+print('abc')
+
