@@ -36,3 +36,6 @@ def ticktock(n):
 
 timer_A_pause(30)
 timer_B()
+
+
+print('abcabcabcabcabcabcabcabcabcabcabcabcabc')
