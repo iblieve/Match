@@ -1,31 +1,18 @@
+import threading
 from datetime import datetime
-from threading import Timer
-import time
 import random
 
 
-def timer_A_pause(a):
-    timer_A()
-    time.sleep(a)
-    timer.cancel()
+def timer_A_pause():
+    timer1.cancel()
 
 
-def timer_A():
+def fun_timer_A():
     temp = random.random()
     ticktock(temp)
-    global timer
-    timer = Timer(5, timer_A)
-    timer.start()
-
-
-def timer_B():
-    # timer = Timer(60, timer_B)
-    # timer.start()
-    # print(datetime.now().strftime("%Y-%m-%d  %H:%M:%S"))
-    # print("123")
-    # timer_A()
-    time.sleep(30)
-    timer_A()
+    global timer1
+    timer1 = threading.Timer(5, fun_timer_A)
+    timer1.start()
 
 
 def ticktock(n):
@@ -34,8 +21,17 @@ def ticktock(n):
     print(n)
 
 
-timer_A_pause(30)
-timer_B()
+def fun_timer_B():
+    print(datetime.now().strftime("%Y-%m-%d  %H:%M:%S"))
+    print("123")
+    fun_timer_A()
 
 
-print('abcabcabcabcabcabcabcabcabcabcabcabcabc')
+timer1 = threading.Timer(1, fun_timer_A)
+timer2 = threading.Timer(30, timer_A_pause)
+timer3 = threading.Timer(60, fun_timer_B)
+timer1.start()
+timer2.start()
+timer3.start()
+print('123123123123123')
+
