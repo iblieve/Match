@@ -28,10 +28,10 @@ def fun_timer_B():
 
 
 timer1 = threading.Timer(1, fun_timer_A)
-timer2 = threading.Timer(30, timer_A_pause)
-timer3 = threading.Timer(60, fun_timer_B)
+# timer2 = threading.Timer(30, timer_A_pause)
+# timer3 = threading.Timer(60, fun_timer_B)
 timer1.start()
-timer2.start()
-timer3.start()
+# timer2.start()
+# timer3.start()
 print('123123123123123')
 
