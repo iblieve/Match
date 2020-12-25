@@ -28,8 +28,8 @@ def fun_timer_B():
 
 
 class MXZTimer():
-    def __init__(self):
-        pass
+    def __init__(self, interval):
+        self.interval = interval
 
     def start(self, p_delay=int):
         if p_delay == 0:
