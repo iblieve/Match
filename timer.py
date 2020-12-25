@@ -55,3 +55,24 @@ class MXZTimer():
 # timer2.start()
 # timer3.start()
 
+
+
+
+
+
+class MXZTimer2(object):
+
+    def __init__(self, p_interval=10, p_args=None, p_callback=None):
+        pass
+
+    def start(self, p_delay=0):
+        pass
+
+    def pause(self):
+        pass
+
+    def resume(self):
+        pass
+
+    def stop(self):
+        pass
