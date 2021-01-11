@@ -3,6 +3,7 @@
 import os
 import sys, datetime
 import xlrd, xlwt
+import difflib
 from app.main.models.XAddress import XAddress
 from app.main.models.XGEODistanceStrategy import XGEODistanceStrategy
 from app.main.models.XAddressStringDiffStrategy import XAddressStringDiffStrategy
@@ -92,11 +93,15 @@ def contains(p_new_excel_list=None, p_old_data=None):
 
         # Note 计算字符匹配度
         # 详细地址（拼接省市区）匹配度; 详细地址(PROD地址) 匹配度
+        # print(new_address.row_id)
         # rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_dict_a=new_address, p_address_dict_b=old_address)
         # sim_string = random.random()
         # a是字符串相似度, b是距离相似度
         # a = sim_string
         # NOTE 暂时强行设置字符串匹配度为1(即完全匹配), 这样可以使得流程能够正常跑通，将来再把字符串匹配算法加上。
+        rst_str_diff, sim_string = XAddressStringDiffStrategy().compare(p_address_a=new_address, p_address_b=old_address)
+        print(f'相似度{sim_string}')
+        print(rst_str_diff)
         a = 1.0
 
         # 首先判断，已有地址的这一条数据有没有经纬度
